@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html ng-app="FSApp">
+<head>
+    <meta charset="utf-8" />
+    <title>File System</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/FSAppController.js"></script>
+    <link href="Site.css" rel="stylesheet" />
+</head>
+<body ng-controller="FSAppController">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Less 10Mb</th>
+                <th>10Mb-50Mb</th>
+                <th>More 100Mb</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ count.less }}</td>
+                <td>{{ count.middle }}</td>
+                <td>{{ count.more }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><span class="current-path">Current path:</span> {{ path }}</p>
+
+    <div ng-repeat="item in dirs">
+        <a href="{{ item.path }}" ng-click="dirName(item.name)">{{ item.name }}</a>
+    </div>
+    <div ng-repeat="item in files">
+        <a href="{{ item.path }}">{{ item.name }}</a>
+    </div>
+</body>
+</html>

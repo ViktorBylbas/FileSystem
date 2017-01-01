@@ -1,0 +1,5 @@
+.vs/
+src/FileSystem/obj/
+src/FileSystem/bin/
+src/FileSystem/wwwroot/Root/
+src/FileSystem/wwwroot/Files/

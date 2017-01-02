@@ -9,7 +9,7 @@
     <link href="Site.css" rel="stylesheet" />
 </head>
 <body ng-controller="FSAppController">
-    <table class="table">
+    <table class="table-count">
         <thead>
             <tr>
                 <th>Less 10Mb</th>
@@ -28,11 +28,26 @@
 
     <p><span class="current-path">Current path:</span> {{ path }}</p>
 
-    <div ng-repeat="item in dirs">
-        <a href="{{ item.path }}" ng-click="dirName(item.name)">{{ item.name }}</a>
-    </div>
-    <div ng-repeat="item in files">
-        <a href="{{ item.path }}">{{ item.name }}</a>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Data changing</th>
+                <th>Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in dirs">
+                <td><a href="{{ item.path }}" ng-click="dirName(item.name)">{{ item.name }}</a></td>
+                <td>{{ item.dateChanging }}</td>
+                <td><span ng-if="item.size !== null">{{ item.size }} KB</span></td>
+            </tr>
+            <tr ng-repeat="item in files">
+                <td><a href="{{ item.path }}" ng-click="dirName(item.name)">{{ item.name }}</a></td>
+                <td>{{ item.dateChanging }}</td>
+                <td>{{ item.size }} KB</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

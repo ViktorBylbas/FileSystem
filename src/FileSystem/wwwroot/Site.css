@@ -2,12 +2,15 @@
   border: 1px solid #bdbdbd;
   border-collapse: collapse;
   padding: 5px;
-  text-align: center;
 }
 
 table thead {
   background-color: #bdbdbd;
   color: white;
+}
+
+.table tbody td:last-child {    
+  text-align: right;
 }
 
 .current-path {

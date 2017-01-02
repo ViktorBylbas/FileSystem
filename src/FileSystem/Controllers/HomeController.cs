@@ -50,11 +50,7 @@ namespace FileSystem.Controllers
 
         public string GetCurrentPath([FromBody] DirectoryParametrs dirParam)
         {
-            if (!Directory.Exists(config.PathToRootDir))
-                Directory.CreateDirectory(config.PathToRootDir);
-
-            var path = Path.Combine(config.PathToRootDir, dirParam.Path);
-            return new DirectoryInfo(path).FullName.ToString();
+            return Path.Combine(config.RootDirName, dirParam.Path);
         }
 
         public JsonResult GetFiles([FromBody] DirectoryParametrs dirParam)
@@ -64,26 +60,45 @@ namespace FileSystem.Controllers
 
             var path = config.PathToRootDir;
             var dirInfo = new DirectoryInfo(path);
-            var files = dirInfo.GetFiles().ToList()
-                .Select(x => new { Name = x.Name, Path = Path.Combine(config.RootDirName, x.Name) }).ToList();
+            var files = dirInfo.GetFiles().ToList().Select(x => new
+                {
+                    Name = x.Name,
+                    Path = Path.Combine(config.RootDirName, x.Name),
+                    DateChanging = x.LastWriteTime.ToString("dd/MM/yyyy HH:mm"),
+                    Size = x.Length
+                }).ToList();
 
             if (dirParam.Path != null)
             {
                 path = Path.Combine(path, dirParam.Path);
                 dirInfo = new DirectoryInfo(path);
 
-                files = dirInfo.GetFiles().ToList()
-                    .Select(x => new { Name = x.Name, Path = Path.Combine(config.RootDirName, dirParam.Path, x.Name) })
-                    .ToList();
+                files = dirInfo.GetFiles().ToList().Select(x => new
+                    {
+                        Name = x.Name,
+                        Path = Path.Combine(config.RootDirName, dirParam.Path, x.Name),
+                        DateChanging = x.LastWriteTime.ToString("dd/MM/yyyy HH:mm"),
+                        Size = x.Length
+                    }).ToList();
             }
 
             List<DirectoryParametrs> dirs = new List<DirectoryParametrs>();
-            if(dirParam.Path != null & dirParam.Path != "")
-                dirs.Add(new DirectoryParametrs() { Name = "..", Path = new DirectoryInfo(config.PathToRootDir)
-                    .FullName.ToString() });
+            if (dirParam.Path != null & dirParam.Path != "")
+                dirs.Add(new DirectoryParametrs()
+                {
+                    Name = "..",
+                    Path = new DirectoryInfo(config.PathToRootDir).FullName.ToString(),
+                    DateChanging = null,
+                    Size = null
+                });
 
-            var allDirs = dirInfo.GetDirectories().ToList()
-                .Select(x => new DirectoryParametrs() { Name = x.Name, Path = x.FullName }).ToList();
+            var allDirs = dirInfo.GetDirectories().ToList().Select(x => new DirectoryParametrs()
+                {
+                    Name = x.Name,
+                    Path = x.FullName,
+                    DateChanging = x.LastWriteTime.ToString("dd/MM/yyyy HH:mm"),
+                    Size = Directories.GetSize(x)
+                }).ToList();
             foreach (var dir in allDirs)
                 dirs.Add(dir);
 
